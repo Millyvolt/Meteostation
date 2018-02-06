@@ -2,7 +2,7 @@
  * fonts.h
  *
  *  Created on: 6 февр. 2018 г.
- *      Author: Vova d
+ *      Author: Vova
  */
 
 #ifndef FONTS_H_

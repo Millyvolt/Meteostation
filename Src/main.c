@@ -58,11 +58,8 @@ TIM_HandleTypeDef htim2;
 /* Private variables ---------------------------------------------------------*/
 
 
-
 uint8_t x_adr, y_adr, dataDHT[5];
 uint16_t rh, tmpr;
-
-
 
 
 /* USER CODE END PV */
@@ -152,12 +149,12 @@ int main(void)
 
   HAL_Delay(1000);	/*DHT2_ NEEDS 2S DELAY FOR INITIALIZATION*/
 
-  x_adr = 2;
+/*  x_adr = 2;
   XadressLCD();
   y_adr = 1;
   YadressLCD();
   PrintString("Привет");
-  HAL_Delay(9000);
+  HAL_Delay(1000);*/
 
   while (1)
   {
@@ -178,7 +175,14 @@ int main(void)
 		HAL_Delay(3000);
 
 
-
+		if( HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET )
+		{
+			LCD_RAM_Clr();
+			PrintString("Привет еще раз");
+			HAL_Delay(5000);
+			LCD_RAM_Clr();
+			PrintFrame();
+		}
 
 
   /* USER CODE END WHILE */
@@ -419,17 +423,21 @@ void YadressLCD(void)
 
 void LCD_RAM_Clr(void)
 {
-	uint8_t i, byte;
+	uint8_t i;
 
-	byte = 0;
+	x_adr = 0;
+	XadressLCD();
+	y_adr = 0;
+	YadressLCD();
+
 	for (i=0; i<252; i++)
-		SendData(byte);
+		SendData(0);
 	x_adr = 0;
 	y_adr = 3;
 	XadressLCD();
 	YadressLCD();
 	for (i=0; i<252; i++)
-		SendData(byte);
+		SendData(0);
 }
 
 void PrintFrame(void)
