@@ -53,6 +53,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -68,10 +69,12 @@ uint16_t rh, tmpr;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_TIM3_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
+/*HAL_StatusTypeDef HAL_TIM_Base_Start_IT(TIM_HandleTypeDef *htim);*/
 
 
 void LCD_Init(void);
@@ -86,6 +89,7 @@ void LCD_RAM_Clr(void);
 void PrintFrame(void);
 void XadressLCD(void);
 void YadressLCD(void);
+void SetXY(uint8_t x, uint8_t y);
 void PrintFont(uint8_t symbol);
 void PinAOut(uint16_t GPIO_Pin);
 void PinAIn(uint16_t GPIO_Pin);
@@ -133,8 +137,12 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM2_Init();
+  MX_TIM3_Init();
 
   /* USER CODE BEGIN 2 */
+
+  LCD_Init();
+  HAL_TIM_Base_Start_IT(&htim3);
 
   /* USER CODE END 2 */
 
@@ -142,19 +150,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
 
-
-  LCD_Init();
   LCD_RAM_Clr();
+  SetXY(24,2);
+  PrintString("Привет");
+  HAL_Delay(3000);
   PrintFrame();
 
   HAL_Delay(1000);	/*DHT2_ NEEDS 2S DELAY FOR INITIALIZATION*/
 
-/*  x_adr = 2;
-  XadressLCD();
-  y_adr = 1;
-  YadressLCD();
-  PrintString("Привет");
-  HAL_Delay(1000);*/
+
 
   while (1)
   {
@@ -178,6 +182,7 @@ int main(void)
 		if( HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET )
 		{
 			LCD_RAM_Clr();
+			SetXY(0,2);
 			PrintString("Привет еще раз");
 			HAL_Delay(5000);
 			LCD_RAM_Clr();
@@ -266,6 +271,39 @@ static void MX_TIM2_Init(void)
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
+/* TIM3 init function */
+static void MX_TIM3_Init(void)
+{
+
+  TIM_ClockConfigTypeDef sClockSourceConfig;
+  TIM_MasterConfigTypeDef sMasterConfig;
+
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 1999;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 19999;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
@@ -419,6 +457,14 @@ void XadressLCD(void)
 void YadressLCD(void)
 {
 	SendCom(0b01000000 + y_adr);
+}
+
+void SetXY(uint8_t x, uint8_t y)
+{
+	  x_adr = x;
+	  XadressLCD();
+	  y_adr = y;
+	  YadressLCD();
 }
 
 void LCD_RAM_Clr(void)
@@ -752,8 +798,6 @@ void _Error_Handler(char * file, int line)
   }
   /* USER CODE END Error_Handler_Debug */ 
 }
-
-
 
 #ifdef USE_FULL_ASSERT
 
