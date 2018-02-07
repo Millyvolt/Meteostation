@@ -37,6 +37,11 @@
 
 /* USER CODE BEGIN 0 */
 
+
+/*extern enum ButState but2state;*/
+extern uint8_t but2;
+
+
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -196,7 +201,16 @@ void TIM3_IRQHandler(void)
   /* USER CODE BEGIN TIM3_IRQn 1 */
 
 
-  HAL_GPIO_TogglePin(LEDB12_GPIO_Port, LEDB12_Pin);
+  if( HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET )
+  {
+	 if( !but2 )		/*button is pressed just now*/
+	 {
+		  HAL_GPIO_TogglePin(LEDB12_GPIO_Port, LEDB12_Pin);
+		  but2 = 1;		/*flag of pressing button*/
+	 }
+  }
+  else if( but2 )
+	  but2 = 0;
 
 
   /* USER CODE END TIM3_IRQn 1 */

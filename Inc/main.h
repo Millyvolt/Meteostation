@@ -83,6 +83,10 @@
 
 /* USER CODE BEGIN Private defines */
 
+
+#define MICROSECONDS50 50
+
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

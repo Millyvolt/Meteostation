@@ -42,10 +42,8 @@
 
 /* USER CODE BEGIN Includes */
 
-#include <stdarg.h>
 
-#define MICROSECONDS50 50
-
+/*#include <stdarg.h>*/
 #include "fonts.h"
 
 
@@ -59,8 +57,17 @@ TIM_HandleTypeDef htim3;
 /* Private variables ---------------------------------------------------------*/
 
 
-uint8_t x_adr, y_adr, dataDHT[5];
+typedef enum ButState
+{
+	RELEASED,
+	PRESSED
+} ButtonState;
+
+uint8_t x_adr, y_adr, dataDHT[5], but2;
 uint16_t rh, tmpr;
+ButtonState but1state = RELEASED;
+enum ButState but2state = RELEASED;
+
 
 
 /* USER CODE END PV */
@@ -179,7 +186,7 @@ int main(void)
 		HAL_Delay(3000);
 
 
-		if( HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET )
+/*		if( HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET )
 		{
 			LCD_RAM_Clr();
 			SetXY(0,2);
@@ -187,7 +194,7 @@ int main(void)
 			HAL_Delay(5000);
 			LCD_RAM_Clr();
 			PrintFrame();
-		}
+		}*/
 
 
   /* USER CODE END WHILE */
@@ -287,7 +294,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 1999;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 19999;
+  htim3.Init.Period = 19;		/*20ms - polling buttons*/
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
