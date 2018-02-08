@@ -58,16 +58,17 @@ TIM_HandleTypeDef htim3;
 
 
 typedef enum ButState
-{
-	RELEASED,
+{							/**/
+	RELEASED,				/**/
 	PRESSED
 } ButtonState;
+ButtonState but1state = RELEASED;	/* i can't use it in file stm32f1xx_it.c 	_      _	*/
+enum ButState but2state = RELEASED;										/*		 \_:[_/		*/
 
-uint8_t x_adr, y_adr, dataDHT[5], but2;
+uint8_t x_adr, y_adr, dataDHT[5];
+uint8_t but1, but2;	/*but_=1 means button pressed, 0 - released*/
+uint8_t screen_state;	/* =0 - showing temp and rh, =1 - menu */
 uint16_t rh, tmpr;
-ButtonState but1state = RELEASED;
-enum ButState but2state = RELEASED;
-
 
 
 /* USER CODE END PV */
@@ -109,6 +110,7 @@ void PrintToBig(uint8_t number);
 void PrintRHTmprBig(uint16_t rh_or_tmpr);
 void PrintString(uint8_t *strng);
 void myputc(uint8_t symbol);
+void Screen0(void);
 
 
 
@@ -165,6 +167,24 @@ int main(void)
 
   HAL_Delay(1000);	/*DHT2_ NEEDS 2S DELAY FOR INITIALIZATION*/
 
+  while(1)
+  {
+
+	  switch(screen_state)
+	  {
+	  case 0:
+		  Screen0();
+		  break;
+	  case 1:
+		  break;
+	  case 2:
+		  break;
+	  default:
+		  PinReset(LEDB12_GPIO_Port, LEDB12_Pin);	/* error */
+		  break;
+	  }
+
+  }
 
 
   while (1)
@@ -294,7 +314,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 1999;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 19;		/*20ms - polling buttons*/
+  htim3.Init.Period = 14;		/*15ms - polling buttons*/
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -785,6 +805,23 @@ void myputc(uint8_t symbol)
 
 	x_adr += 6;
 	XadressLCD();
+}
+
+void Screen0(void)
+{
+	ReadDHT(SDA1_Pin);				//reading DHT21
+	rh = dataDHT[0]*256 + dataDHT[1];
+	tmpr = dataDHT[2]*256 + dataDHT[3];
+	PrintRHTmprBig(tmpr);
+	PrintRHTmprBig(rh);
+	HAL_Delay(3000);
+
+	ReadDHT(SDA2_Pin);				//reading DHT22
+	rh = dataDHT[0]*256 + dataDHT[1];
+	tmpr = dataDHT[2]*256 + dataDHT[3];
+	PrintRHTmprBig(tmpr);
+	PrintRHTmprBig(rh);
+	HAL_Delay(3000);
 }
 
 

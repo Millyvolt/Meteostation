@@ -209,7 +209,7 @@ void TIM3_IRQHandler(void)
 		  but2 = 1;		/*flag of pressing button*/
 	 }
   }
-  else if( but2 )
+  else if( but2 )		/*button was already pressed*/
 	  but2 = 0;
 
 
