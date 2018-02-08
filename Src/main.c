@@ -98,7 +98,6 @@ void PrintFrame(void);
 void XadressLCD(void);
 void YadressLCD(void);
 void SetXY(uint8_t x, uint8_t y);
-void PrintFont(uint8_t symbol);
 void PinAOut(uint16_t GPIO_Pin);
 void PinAIn(uint16_t GPIO_Pin);
 void StartDHT(uint16_t GPIO_Pin);
@@ -111,6 +110,7 @@ void PrintRHTmprBig(uint16_t rh_or_tmpr);
 void PrintString(uint8_t *strng);
 void myputc(uint8_t symbol);
 void Screen0(void);
+void Screen1(void);
 
 
 
@@ -176,7 +176,8 @@ int main(void)
 		  Screen0();
 		  break;
 	  case 1:
-		  break;
+		  HAL_Delay(500);	/* without this doesn't work 		 */
+		  break;			/* switch to Screen0 (optimization?) */
 	  case 2:
 		  break;
 	  default:
@@ -187,36 +188,6 @@ int main(void)
   }
 
 
-  while (1)
-  {
-
-
-		ReadDHT(SDA1_Pin);				//reading DHT21
-		rh = dataDHT[0]*256 + dataDHT[1];
-		tmpr = dataDHT[2]*256 + dataDHT[3];
-		PrintRHTmprBig(tmpr);
-		PrintRHTmprBig(rh);
-		HAL_Delay(3000);
-
-		ReadDHT(SDA2_Pin);				//reading DHT22
-		rh = dataDHT[0]*256 + dataDHT[1];
-		tmpr = dataDHT[2]*256 + dataDHT[3];
-		PrintRHTmprBig(tmpr);
-		PrintRHTmprBig(rh);
-		HAL_Delay(3000);
-
-
-/*		if( HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET )
-		{
-			LCD_RAM_Clr();
-			SetXY(0,2);
-			PrintString("Привет еще раз");
-			HAL_Delay(5000);
-			LCD_RAM_Clr();
-			PrintFrame();
-		}*/
-
-
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
@@ -224,7 +195,6 @@ int main(void)
   }
   /* USER CODE END 3 */
 
-}
 
 /** System Clock Configuration
 */
@@ -603,17 +573,6 @@ void PrintFrame(void)
 	SendCom(byte);
 }
 
-void PrintFont (uint8_t symbol)
-{
-	uint8_t i;
-
-	for(i=0; i<5; i++)
-		SendData( font [symbol][i] );
-
-	x_adr += 6;
-	XadressLCD();
-}
-
 void PinAOut(uint16_t GPIO_Pin)
 {
 	GPIO_InitTypeDef GPIO_InitStruct;
@@ -650,7 +609,7 @@ void StartDHT(uint16_t GPIO_Pin)
 }
 
 void ReadDHT(uint16_t GPIO_Pin)
-{
+{		/* ReadDHT function executing ~10ms */
 	uint8_t i, j;
 
 	HAL_NVIC_DisableIRQ(TIM3_IRQn);	/* try later to disable interrupts after StartDHT() */
@@ -680,7 +639,7 @@ void ReadDHT(uint16_t GPIO_Pin)
 
 }
 
-void PrintRHTmprFont(uint16_t rh_or_tmpr)
+/*void PrintRHTmprFont(uint16_t rh_or_tmpr)
 {
 	uint8_t tens, units, tenth;
 
@@ -692,7 +651,7 @@ void PrintRHTmprFont(uint16_t rh_or_tmpr)
 	PrintFont(tens);
 	PrintFont(units);
 	PrintFont(tenth);
-}
+}*/
 
 void NextLine(void)
 {
@@ -812,6 +771,9 @@ void myputc(uint8_t symbol)
 
 void Screen0(void)
 {
+	LCD_RAM_Clr();
+	PrintFrame();
+
 	ReadDHT(SDA1_Pin);				//reading DHT21
 	rh = dataDHT[0]*256 + dataDHT[1];
 	tmpr = dataDHT[2]*256 + dataDHT[3];
@@ -819,13 +781,24 @@ void Screen0(void)
 	PrintRHTmprBig(rh);
 	HAL_Delay(1000);
 
-	ReadDHT(SDA2_Pin);				//reading DHT22
-	rh = dataDHT[0]*256 + dataDHT[1];
-	tmpr = dataDHT[2]*256 + dataDHT[3];
-	PrintRHTmprBig(tmpr);
-	PrintRHTmprBig(rh);
-	HAL_Delay(1000);
+	if( !screen_state )
+	{
+		ReadDHT(SDA2_Pin);				//reading DHT22
+		rh = dataDHT[0]*256 + dataDHT[1];
+		tmpr = dataDHT[2]*256 + dataDHT[3];
+		PrintRHTmprBig(tmpr);
+		PrintRHTmprBig(rh);
+		HAL_Delay(1000);
+	}
 }
+
+void Screen1(void)
+{
+	LCD_RAM_Clr();
+	PrintString("Меню");
+
+}
+
 
 
 /* USER CODE END 4 */
