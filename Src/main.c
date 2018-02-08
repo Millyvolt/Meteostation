@@ -653,6 +653,8 @@ void ReadDHT(uint16_t GPIO_Pin)
 {
 	uint8_t i, j;
 
+	HAL_NVIC_DisableIRQ(TIM3_IRQn);	/* try later to disable interrupts after StartDHT() */
+
 	StartDHT(GPIO_Pin);
 
 	for(i=0; i<5; i++)
@@ -672,6 +674,7 @@ void ReadDHT(uint16_t GPIO_Pin)
 		}
 	}
 
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
 	/*MAYBE LATER SHOULD  ADD CHECKING DATA FROM DHT BY CRC*/
 
@@ -814,14 +817,14 @@ void Screen0(void)
 	tmpr = dataDHT[2]*256 + dataDHT[3];
 	PrintRHTmprBig(tmpr);
 	PrintRHTmprBig(rh);
-	HAL_Delay(3000);
+	HAL_Delay(1000);
 
 	ReadDHT(SDA2_Pin);				//reading DHT22
 	rh = dataDHT[0]*256 + dataDHT[1];
 	tmpr = dataDHT[2]*256 + dataDHT[3];
 	PrintRHTmprBig(tmpr);
 	PrintRHTmprBig(rh);
-	HAL_Delay(3000);
+	HAL_Delay(1000);
 }
 
 
