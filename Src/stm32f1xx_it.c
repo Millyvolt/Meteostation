@@ -43,7 +43,9 @@ extern uint8_t but1, but2, screen_state, menu_state;
 
 void Screen1(void);
 void Switch0_1(void);
-void Switch1_0(void);
+/*void Switch1_0(void);*/
+void Switch1_2(void);
+void Switch2_0(void);
 void LCD_RAM_Clr(void);
 void PrintFrame(void);
 
@@ -219,9 +221,21 @@ void TIM3_IRQHandler(void)
 			 Screen1();		/* takes too much time for interrupt */
 			 break;
 		 case 1:
-			 screen_state = 0;
-			 LCD_RAM_Clr();	/* takes too much time for interrupt */
-			 PrintFrame();	/*									 */
+			 switch(menu_state)
+			 {
+			 case 0:
+				 break;
+			 case 1:
+				 break;
+			 case 2:
+				 screen_state = 0;
+				 menu_state = 0;
+				 LCD_RAM_Clr();	/* takes too much time for interrupt */
+				 PrintFrame();	/*									 */
+				 break;
+			 default:
+				 break;
+			 }
 			 break;
 		 default:
 			 break;
@@ -251,7 +265,11 @@ void TIM3_IRQHandler(void)
 				  menu_state = 1;
 				  break;
 			  case 1:
-				  Switch1_0();
+				  Switch1_2();
+				  menu_state = 2;
+				  break;
+			  case 2:
+				  Switch2_0();
 				  menu_state = 0;
 				  break;
 			  default:

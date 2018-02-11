@@ -114,6 +114,8 @@ void Screen0(void);
 void Screen1(void);
 void Switch0_1(void);
 void Switch1_0(void);
+void Switch1_2(void);
+void Switch2_0(void);
 
 
 /* USER CODE END PFP */
@@ -790,15 +792,16 @@ void Screen0(void)
 		HAL_Delay(1000);
 	}
 }
-
 void Screen1(void)
 {
 	LCD_RAM_Clr();
-	PrintString("ћеню");
+	PrintString("     ћеню");
 	SetXY(0,1);
-	PrintString("о 1 пункт");
+	PrintString("о 0 пункт");
 	SetXY(0,2);
-	PrintString("  2 пункт");
+	PrintString("  1 пункт");
+	SetXY(0,3);
+	PrintString("  2 выход");
 
 }
 void Switch0_1(void)
@@ -814,6 +817,20 @@ void Switch1_0(void)
 	PrintString("о");
 	SetXY(0,2);
 	PrintString(" ");
+}
+void Switch1_2(void)
+{
+	SetXY(0,2);
+	PrintString(" ");
+	SetXY(0,3);
+	PrintString("о");
+}
+void Switch2_0(void)
+{
+	SetXY(0,3);
+	PrintString(" ");
+	SetXY(0,1);
+	PrintString("о");
 }
 
 
