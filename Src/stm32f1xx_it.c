@@ -39,9 +39,13 @@
 
 
 /*extern enum ButState but2state;*/
-extern uint8_t but1, but2, screen_state;
+extern uint8_t but1, but2, screen_state, menu_state;
 
 void Screen1(void);
+void Switch0_1(void);
+void Switch1_0(void);
+void LCD_RAM_Clr(void);
+void PrintFrame(void);
 
 
 /* USER CODE END 0 */
@@ -205,7 +209,8 @@ void TIM3_IRQHandler(void)
 
   if( HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET )
   {
-	 if( !but2 )		/*button is pressed just now*/
+	 /* polling button2 */
+	  if( !but2 )		/*button is pressed just now*/
 	 {
 		 switch(screen_state)
 		 {
@@ -215,16 +220,54 @@ void TIM3_IRQHandler(void)
 			 break;
 		 case 1:
 			 screen_state = 0;
+			 LCD_RAM_Clr();	/* takes too much time for interrupt */
+			 PrintFrame();	/*									 */
 			 break;
 		 default:
 			 break;
 		 }
-		  HAL_GPIO_TogglePin(LEDB12_GPIO_Port, LEDB12_Pin);
-		  but2 = 1;		/*flag of pressing button*/
+		  /*HAL_GPIO_TogglePin(LEDB12_GPIO_Port, LEDB12_Pin);*/
+		  but2 = 1;		/*flag of pressing button2*/
 	 }
   }
   else if( but2 )		/*button was already pressed*/
 	  but2 = 0;
+
+  /* polling button1 */
+  if( HAL_GPIO_ReadPin(BUTTON1_GPIO_Port, BUTTON1_Pin) == GPIO_PIN_RESET )
+  {
+	  if( !but1 )
+	  {
+		  switch(screen_state)
+		  {
+		  case 0:
+			  HAL_GPIO_TogglePin(LEDB12_GPIO_Port, LEDB12_Pin);
+			  break;
+		  case 1:
+			  switch(menu_state)
+			  {
+			  case 0:
+				  Switch0_1();
+				  menu_state = 1;
+				  break;
+			  case 1:
+				  Switch1_0();
+				  menu_state = 0;
+				  break;
+			  default:
+				  break;
+			  }
+			  break;
+		  default:
+			  break;
+		  }
+
+		  but1 = 1;		/*flag of pressing button1*/
+	  }
+  }
+  else if(but1)
+	  but1 = 0;
+
 
 
   /* USER CODE END TIM3_IRQn 1 */

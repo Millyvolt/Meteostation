@@ -68,6 +68,7 @@ enum ButState but2state = RELEASED;										/*		 \_:[_/		*/
 uint8_t x_adr, y_adr, dataDHT[5];
 uint8_t but1, but2;	/*but_=1 means button pressed, 0 - released*/
 uint8_t screen_state;	/* =0 - showing temp and rh, =1 - menu */
+uint8_t menu_state;
 uint16_t rh, tmpr;
 
 
@@ -111,7 +112,8 @@ void PrintString(uint8_t *strng);
 void myputc(uint8_t symbol);
 void Screen0(void);
 void Screen1(void);
-
+void Switch0_1(void);
+void Switch1_0(void);
 
 
 /* USER CODE END PFP */
@@ -771,9 +773,6 @@ void myputc(uint8_t symbol)
 
 void Screen0(void)
 {
-	LCD_RAM_Clr();
-	PrintFrame();
-
 	ReadDHT(SDA1_Pin);				//reading DHT21
 	rh = dataDHT[0]*256 + dataDHT[1];
 	tmpr = dataDHT[2]*256 + dataDHT[3];
@@ -796,7 +795,25 @@ void Screen1(void)
 {
 	LCD_RAM_Clr();
 	PrintString("ћеню");
+	SetXY(0,1);
+	PrintString("о 1 пункт");
+	SetXY(0,2);
+	PrintString("  2 пункт");
 
+}
+void Switch0_1(void)
+{
+	SetXY(0,1);
+	PrintString(" ");
+	SetXY(0,2);
+	PrintString("о");
+}
+void Switch1_0(void)
+{
+	SetXY(0,1);
+	PrintString("о");
+	SetXY(0,2);
+	PrintString(" ");
 }
 
 
