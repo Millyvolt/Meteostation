@@ -48,6 +48,7 @@ void Switch1_2(void);
 void Switch2_0(void);
 void LCD_RAM_Clr(void);
 void PrintFrame(void);
+void PrintVariable(uint16_t var);
 
 
 /* USER CODE END 0 */

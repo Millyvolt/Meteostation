@@ -69,7 +69,7 @@ uint8_t x_adr, y_adr, dataDHT[5];
 uint8_t but1, but2;	/*but_=1 means button pressed, 0 - released*/
 uint8_t screen_state;	/* =0 - showing temp and rh, =1 - menu */
 uint8_t menu_state;
-uint16_t rh, tmpr;
+uint16_t rh, tmpr, timeouts;
 
 
 /* USER CODE END PV */
@@ -96,6 +96,7 @@ void SendData(uint8_t Data);
 void SendCom(uint8_t Command);
 void LCD_RAM_Clr(void);
 void PrintFrame(void);
+void NextLine(void);
 void XadressLCD(void);
 void YadressLCD(void);
 void SetXY(uint8_t x, uint8_t y);
@@ -104,12 +105,12 @@ void PinAIn(uint16_t GPIO_Pin);
 void StartDHT(uint16_t GPIO_Pin);
 void ReadDHT(uint16_t GPIO_Pin);
 void PrintRHTmprFont(uint16_t rh_or_tmpr);
-void NextLine(void);
 void PrintBig(uint8_t num[][14]);
 void PrintToBig(uint8_t number);
 void PrintRHTmprBig(uint16_t rh_or_tmpr);
 void PrintString(uint8_t *strng);
 void myputc(uint8_t symbol);
+void PrintVariable(uint16_t var);
 void Screen0(void);
 void Screen1(void);
 void Switch0_1(void);
@@ -404,7 +405,6 @@ void PinSet(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
 	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_SET);
 }
-
 void PinReset(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
 	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_RESET);
@@ -416,14 +416,12 @@ void SendBitSet(void)
 	PinSet(GPIOA, DIN_Pin);
 	PinSet(GPIOA, CLK_Pin);
 }
-
 void SendBitClr(void)
 {
 	PinReset(GPIOA, CLK_Pin);
 	PinReset(GPIOA, DIN_Pin);
 	PinSet(GPIOA, CLK_Pin);
 }
-
 void SendByte(uint8_t Byte)
 {
 	uint8_t i;
@@ -437,13 +435,11 @@ void SendByte(uint8_t Byte)
 	}
 	PinSet(GPIOA, CE_Pin);
 }
-
 void SendData(uint8_t Data)
 {
 	PinSet(GPIOA, DC_Pin);
 	SendByte(Data);
 }
-
 void SendCom(uint8_t Command)
 {
 	PinReset(GPIOA, DC_Pin);
@@ -454,12 +450,10 @@ void XadressLCD(void)
 {
 	SendCom(0b10000000 + x_adr);
 }
-
 void YadressLCD(void)
 {
 	SendCom(0b01000000 + y_adr);
 }
-
 void SetXY(uint8_t x, uint8_t y)
 {
 	  x_adr = x;
@@ -486,7 +480,6 @@ void LCD_RAM_Clr(void)
 	for (i=0; i<252; i++)
 		SendData(0);
 }
-
 void PrintFrame(void)
 {
 	uint8_t i;
@@ -576,6 +569,13 @@ void PrintFrame(void)
 	byte = 0b00100000;	//horisontal adressation back
 	SendCom(byte);
 }
+void NextLine(void)
+{
+	x_adr = 0;
+	XadressLCD();
+	y_adr += 1;
+	YadressLCD();
+}
 
 void PinAOut(uint16_t GPIO_Pin)
 {
@@ -587,7 +587,6 @@ void PinAOut(uint16_t GPIO_Pin)
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 }
-
 void PinAIn(uint16_t GPIO_Pin)
 {
 	GPIO_InitTypeDef GPIO_InitStruct;
@@ -611,7 +610,6 @@ void StartDHT(uint16_t GPIO_Pin)
 
 
 }
-
 void ReadDHT(uint16_t GPIO_Pin)
 {		/* ReadDHT function executing ~10ms */
 	uint8_t i, j;
@@ -627,7 +625,16 @@ void ReadDHT(uint16_t GPIO_Pin)
 			TIM2->CNT = 0;
 			while( HAL_GPIO_ReadPin(GPIOA, GPIO_Pin)==GPIO_PIN_RESET );
 			TIM2->CR1 = 1;
-			while( HAL_GPIO_ReadPin(GPIOA, GPIO_Pin)==GPIO_PIN_SET );
+			while( HAL_GPIO_ReadPin(GPIOA, GPIO_Pin)==GPIO_PIN_SET )
+				{
+					if( TIM2->CNT > 200 )
+					{
+						TIM2->CNT = 0;
+						TIM2->CR1 = 0;
+						timeouts++;
+						return;
+					}
+				}
 			TIM2->CR1 = 0;
 
 			if( (TIM2->CNT)>MICROSECONDS50 )	/*75us: data bit=1*/
@@ -642,7 +649,6 @@ void ReadDHT(uint16_t GPIO_Pin)
 	/*MAYBE LATER SHOULD  ADD CHECKING DATA FROM DHT BY CRC*/
 
 }
-
 /*void PrintRHTmprFont(uint16_t rh_or_tmpr)
 {
 	uint8_t tens, units, tenth;
@@ -656,15 +662,6 @@ void ReadDHT(uint16_t GPIO_Pin)
 	PrintFont(units);
 	PrintFont(tenth);
 }*/
-
-void NextLine(void)
-{
-	x_adr = 0;
-	XadressLCD();
-	y_adr += 1;
-	YadressLCD();
-}
-
 void PrintBig(uint8_t num[][14])
 {
 	uint8_t i, j;
@@ -683,7 +680,6 @@ void PrintBig(uint8_t num[][14])
 	}
 
 }
-
 void PrintToBig(uint8_t number)
 {
 	switch(number)
@@ -723,7 +719,6 @@ void PrintToBig(uint8_t number)
 		break;
 	}
 }
-
 void PrintRHTmprBig(uint16_t rh_or_tmpr)
 {
 	uint8_t tens, units, tenth, temp;
@@ -752,7 +747,6 @@ void PrintRHTmprBig(uint16_t rh_or_tmpr)
 		PrintToBig(tenth);
 
 }
-
 void PrintString(uint8_t *strng)
 {
 	while(*strng)
@@ -761,7 +755,6 @@ void PrintString(uint8_t *strng)
 
 	}
 }
-
 void myputc(uint8_t symbol)
 {
 	uint8_t i;
@@ -772,6 +765,24 @@ void myputc(uint8_t symbol)
 	x_adr += 6;
 	XadressLCD();
 }
+void PrintVariable(uint16_t var)
+{
+	uint8_t hundreds, tens, units;
+
+	hundreds = var/100;
+	var %= 100;
+	tens = var/10;
+	units = var%10;
+
+/*	tenth = var%10;
+	var /= 10;
+	units = var%10;
+	tens = var/10;*/
+
+	myputc(hundreds+48);
+	myputc(tens+48);
+	myputc(units+48);
+}
 
 void Screen0(void)
 {
@@ -780,7 +791,7 @@ void Screen0(void)
 	tmpr = dataDHT[2]*256 + dataDHT[3];
 	PrintRHTmprBig(tmpr);
 	PrintRHTmprBig(rh);
-	HAL_Delay(1000);
+	HAL_Delay(2000);
 
 	if( !screen_state )
 	{
@@ -789,7 +800,7 @@ void Screen0(void)
 		tmpr = dataDHT[2]*256 + dataDHT[3];
 		PrintRHTmprBig(tmpr);
 		PrintRHTmprBig(rh);
-		HAL_Delay(1000);
+		HAL_Delay(2000);
 	}
 }
 void Screen1(void)
@@ -802,6 +813,9 @@ void Screen1(void)
 	PrintString("  1 пункт");
 	SetXY(0,3);
 	PrintString("  2 выход");
+	SetXY(0,4);
+	PrintString("таймауты ");
+	PrintVariable(timeouts);
 
 }
 void Switch0_1(void)
