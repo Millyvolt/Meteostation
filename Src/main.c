@@ -87,8 +87,8 @@ static void MX_TIM3_Init(void);
 
 
 void LCD_Init(void);
-void PinSet(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
-void PinReset(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
+/*void PinSet(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);*/
+/*void PinReset(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);*/
 void SendBitSet(void);
 void SendBitClr(void);
 void SendByte(uint8_t Byte);
@@ -186,7 +186,8 @@ int main(void)
 	  case 2:
 		  break;
 	  default:
-		  PinReset(LEDB12_GPIO_Port, LEDB12_Pin);	/* error */
+		  /*PinReset(LEDB12_GPIO_Port, LEDB12_Pin);*/	/* error */
+		  HAL_GPIO_WritePin(LEDB12_GPIO_Port, LEDB12_Pin, GPIO_PIN_RESET);
 		  break;
 	  }
 
@@ -371,19 +372,33 @@ static void MX_GPIO_Init(void)
 
 
 
+
+
+/*void PinSet(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+{
+	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_SET);
+}*/
+/*void PinReset(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+{
+	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_RESET);
+}*/
+
 void LCD_Init(void)
 {
 	uint8_t Byte;
 	uint16_t delay;
 
-	PinSet(GPIOA, CE_Pin);
+	/*PinSet(GPIOA, CE_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, CE_Pin, GPIO_PIN_SET);
 
-	PinReset(GPIOA, RST_Pin);
+	/*PinReset(GPIOA, RST_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, RST_Pin, GPIO_PIN_RESET);
 	//задержка (10) ??мс
 	for (delay = 0xFFFF; delay !=0; delay--)
 		;
 
-	PinSet(GPIOA, RST_Pin);
+	/*PinSet(GPIOA, RST_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, RST_Pin, GPIO_PIN_SET);
 
 	Byte = 0b00100001;	//включение дисплея PV=0, расширенные команды H=1
 	SendCom(Byte);
@@ -398,34 +413,30 @@ void LCD_Init(void)
 	SendCom(Byte);
 	Byte = 0b00001100;	//графический нормальный режим
 	SendCom(Byte);
-
 }
-
-void PinSet(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
-{
-	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_SET);
-}
-void PinReset(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
-{
-	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_RESET);
-}
-
 void SendBitSet(void)
 {
-	PinReset(GPIOA, CLK_Pin);
-	PinSet(GPIOA, DIN_Pin);
-	PinSet(GPIOA, CLK_Pin);
+	/*PinReset(GPIOA, CLK_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, CLK_Pin, GPIO_PIN_RESET);
+	/*PinSet(GPIOA, DIN_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, DIN_Pin, GPIO_PIN_SET);
+	/*PinSet(GPIOA, CLK_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, CLK_Pin, GPIO_PIN_SET);
 }
 void SendBitClr(void)
 {
-	PinReset(GPIOA, CLK_Pin);
-	PinReset(GPIOA, DIN_Pin);
-	PinSet(GPIOA, CLK_Pin);
+	/*PinReset(GPIOA, CLK_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, CLK_Pin, GPIO_PIN_RESET);
+	/*PinReset(GPIOA, DIN_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, DIN_Pin, GPIO_PIN_RESET);
+	/*PinSet(GPIOA, CLK_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, CLK_Pin, GPIO_PIN_SET);
 }
 void SendByte(uint8_t Byte)
 {
 	uint8_t i;
-	PinReset(GPIOA, CE_Pin);
+	/*PinReset(GPIOA, CE_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, CE_Pin, GPIO_PIN_RESET);
 	for (i=7; i<=7; i--)
 	{
 		if ( Byte&(1<<i) )
@@ -433,16 +444,19 @@ void SendByte(uint8_t Byte)
 		else
 			SendBitClr();
 	}
-	PinSet(GPIOA, CE_Pin);
+	/*PinSet(GPIOA, CE_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, CE_Pin, GPIO_PIN_SET);
 }
 void SendData(uint8_t Data)
 {
-	PinSet(GPIOA, DC_Pin);
+	/*PinSet(GPIOA, DC_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, DC_Pin, GPIO_PIN_SET);
 	SendByte(Data);
 }
 void SendCom(uint8_t Command)
 {
-	PinReset(GPIOA, DC_Pin);
+	/*PinReset(GPIOA, DC_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, DC_Pin, GPIO_PIN_RESET);
 	SendByte(Command);
 }
 
@@ -600,7 +614,8 @@ void PinAIn(uint16_t GPIO_Pin)
 void StartDHT(uint16_t GPIO_Pin)
 {
 	PinAOut(GPIO_Pin);
-	PinReset(GPIOA, GPIO_Pin);
+	/*PinReset(GPIOA, GPIO_Pin);*/
+	HAL_GPIO_WritePin(GPIOA, GPIO_Pin, GPIO_PIN_RESET);
 	HAL_Delay(2);				/*delay 2ms*/
 	PinAIn(GPIO_Pin);
 
@@ -862,7 +877,8 @@ void _Error_Handler(char * file, int line)
   /* User can add his own implementation to report the HAL error return state */
   while(1) 
   {
-	  PinReset(LEDB12_GPIO_Port, LEDB12_Pin);
+	  /*PinReset(LEDB12_GPIO_Port, LEDB12_Pin);*/
+	  HAL_GPIO_WritePin(LEDB12_GPIO_Port, LEDB12_Pin, GPIO_PIN_RESET);
   }
   /* USER CODE END Error_Handler_Debug */ 
 }
