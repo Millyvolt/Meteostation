@@ -43,8 +43,8 @@
 /* USER CODE BEGIN Includes */
 
 
-/*#include <stdarg.h>*/
 #include "fonts.h"
+#include "nokia5110.h"
 
 
 /* USER CODE END Includes */
@@ -86,24 +86,15 @@ static void MX_TIM3_Init(void);
 /*HAL_StatusTypeDef HAL_TIM_Base_Start_IT(TIM_HandleTypeDef *htim);*/
 
 
-void LCD_Init(void);
 /*void PinSet(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);*/
 /*void PinReset(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);*/
-void SendBitSet(void);
-void SendBitClr(void);
-void SendByte(uint8_t Byte);
-void SendData(uint8_t Data);
-void SendCom(uint8_t Command);
-void LCD_RAM_Clr(void);
-void PrintFrame(void);
-void NextLine(void);
-void XadressLCD(void);
-void YadressLCD(void);
-void SetXY(uint8_t x, uint8_t y);
+
 void PinAOut(uint16_t GPIO_Pin);
 void PinAIn(uint16_t GPIO_Pin);
+
 void StartDHT(uint16_t GPIO_Pin);
 void ReadDHT(uint16_t GPIO_Pin);
+
 void PrintRHTmprFont(uint16_t rh_or_tmpr);
 void PrintBig(uint8_t num[][14]);
 void PrintToBig(uint8_t number);
@@ -370,10 +361,6 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 
-
-
-
-
 /*void PinSet(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
 	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_SET);
@@ -383,213 +370,6 @@ static void MX_GPIO_Init(void)
 	HAL_GPIO_WritePin(GPIOx, GPIO_Pin, GPIO_PIN_RESET);
 }*/
 
-void LCD_Init(void)
-{
-	uint8_t Byte;
-	uint16_t delay;
-
-	/*PinSet(GPIOA, CE_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, CE_Pin, GPIO_PIN_SET);
-
-	/*PinReset(GPIOA, RST_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, RST_Pin, GPIO_PIN_RESET);
-	//задержка (10) ??мс
-	for (delay = 0xFFFF; delay !=0; delay--)
-		;
-
-	/*PinSet(GPIOA, RST_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, RST_Pin, GPIO_PIN_SET);
-
-	Byte = 0b00100001;	//включение дисплея PV=0, расширенные команды H=1
-	SendCom(Byte);
-	Byte = 0b00010011;	// смещение напряжения (Bias)
-	SendCom(Byte);
-	Byte = 0b00000100;  //температурная коррекция 0
-	SendCom(Byte);
-//	Byte = 0b11000000;	//вкл. ген. повыш. напряжения 72
-	Byte = 0b11000000; //
-	SendCom(Byte);
-	Byte = 0b00100000;	//обычные команды
-	SendCom(Byte);
-	Byte = 0b00001100;	//графический нормальный режим
-	SendCom(Byte);
-}
-void SendBitSet(void)
-{
-	/*PinReset(GPIOA, CLK_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, CLK_Pin, GPIO_PIN_RESET);
-	/*PinSet(GPIOA, DIN_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, DIN_Pin, GPIO_PIN_SET);
-	/*PinSet(GPIOA, CLK_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, CLK_Pin, GPIO_PIN_SET);
-}
-void SendBitClr(void)
-{
-	/*PinReset(GPIOA, CLK_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, CLK_Pin, GPIO_PIN_RESET);
-	/*PinReset(GPIOA, DIN_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, DIN_Pin, GPIO_PIN_RESET);
-	/*PinSet(GPIOA, CLK_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, CLK_Pin, GPIO_PIN_SET);
-}
-void SendByte(uint8_t Byte)
-{
-	uint8_t i;
-	/*PinReset(GPIOA, CE_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, CE_Pin, GPIO_PIN_RESET);
-	for (i=7; i<=7; i--)
-	{
-		if ( Byte&(1<<i) )
-			SendBitSet();
-		else
-			SendBitClr();
-	}
-	/*PinSet(GPIOA, CE_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, CE_Pin, GPIO_PIN_SET);
-}
-void SendData(uint8_t Data)
-{
-	/*PinSet(GPIOA, DC_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, DC_Pin, GPIO_PIN_SET);
-	SendByte(Data);
-}
-void SendCom(uint8_t Command)
-{
-	/*PinReset(GPIOA, DC_Pin);*/
-	HAL_GPIO_WritePin(GPIOA, DC_Pin, GPIO_PIN_RESET);
-	SendByte(Command);
-}
-
-void XadressLCD(void)
-{
-	SendCom(0b10000000 + x_adr);
-}
-void YadressLCD(void)
-{
-	SendCom(0b01000000 + y_adr);
-}
-void SetXY(uint8_t x, uint8_t y)
-{
-	  x_adr = x;
-	  XadressLCD();
-	  y_adr = y;
-	  YadressLCD();
-}
-
-void LCD_RAM_Clr(void)
-{
-	uint8_t i;
-
-	x_adr = 0;
-	XadressLCD();
-	y_adr = 0;
-	YadressLCD();
-
-	for (i=0; i<252; i++)
-		SendData(0);
-	x_adr = 0;
-	y_adr = 3;
-	XadressLCD();
-	YadressLCD();
-	for (i=0; i<252; i++)
-		SendData(0);
-}
-void PrintFrame(void)
-{
-	uint8_t i;
-	uint8_t byte;
-	/*uint16_t delay;*/
-
-	x_adr = 0;
-	y_adr = 3;
-	XadressLCD();
-	YadressLCD();
-	for (i=0; i<84; i++)
-	{
-		byte = 1;
-		SendData(byte);
-	}
-	x_adr = 0;
-	y_adr = 5;
-	XadressLCD();
-	YadressLCD();
-	for (i=0; i<84; i++)
-	{
-		byte = 0b10000000;
-		SendData(byte);
-	}
-
-	x_adr = 0;
-	y_adr = 0;
-	XadressLCD();
-	YadressLCD();
-	for (i=0; i<84; i++)
-	{
-		byte = 1;
-		SendData(byte);
-	}
-
-	x_adr = 0;
-	y_adr = 2;
-	XadressLCD();
-	YadressLCD();
-	for (i=0; i<84; i++)
-	{
-		byte = 0b10000000;
-		SendData(byte);
-	}
-
-	byte = 0b00100010;	//vertical adressation
-	SendCom(byte);
-
-	x_adr = 0;
-	y_adr = 0;
-	XadressLCD();
-	YadressLCD();
-	for (i=0; i<6; i++)
-	{
-		byte = 0xFF;
-		SendData(byte);
-	}
-
-//	for (delay = 0xFFFF; delay !=0; delay--)
-//			;
-
-	x_adr = 83;
-	y_adr = 0;
-	XadressLCD();
-	YadressLCD();
-	for (i=0; i<6; i++)
-	{
-		byte = 0xFF;
-		SendData(byte);
-	}
-
-//	for (delay = 0xFFFF; delay !=0; delay--)
-//			;
-	x_adr = 64;
-	y_adr = 0;
-	XadressLCD();
-	YadressLCD();
-	for (i=0; i<6; i++)
-	{
-		byte = 0xFF;
-		SendData(byte);
-	}
-
-//	for (delay = 0xFFFF; delay !=0; delay--)
-//			;
-
-	byte = 0b00100000;	//horisontal adressation back
-	SendCom(byte);
-}
-void NextLine(void)
-{
-	x_adr = 0;
-	XadressLCD();
-	y_adr += 1;
-	YadressLCD();
-}
 
 void PinAOut(uint16_t GPIO_Pin)
 {

@@ -576,8 +576,6 @@ Discarded input sections
  .text          0x00000000        0x0 Src\main.o
  .data          0x00000000        0x0 Src\main.o
  .bss           0x00000000        0x0 Src\main.o
- .text.NextLine
-                0x00000000       0x24 Src\main.o
  .text.Switch1_0
                 0x00000000       0x2c Src\main.o
  .text._Error_Handler
@@ -587,6 +585,11 @@ Discarded input sections
  .bss.but2state
                 0x00000000        0x1 Src\main.o
  .data.font     0x00000000       0x32 Src\main.o
+ .text          0x00000000        0x0 Src\nokia5110.o
+ .data          0x00000000        0x0 Src\nokia5110.o
+ .bss           0x00000000        0x0 Src\nokia5110.o
+ .text.NextLine
+                0x00000000       0x24 Src\nokia5110.o
  .text          0x00000000        0x0 Src\stm32f1xx_hal_msp.o
  .data          0x00000000        0x0 Src\stm32f1xx_hal_msp.o
  .bss           0x00000000        0x0 Src\stm32f1xx_hal_msp.o
@@ -654,6 +657,7 @@ LOAD Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.o
 LOAD Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o
 LOAD Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
 LOAD Src\main.o
+LOAD Src\nokia5110.o
 LOAD Src\stm32f1xx_hal_msp.o
 LOAD Src\stm32f1xx_it.o
 LOAD Src\system_stm32f1xx.o
@@ -805,79 +809,79 @@ LOAD g:/truestudio for stm32 9.0.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.
  .text.SystemClock_Config
                 0x08000d88       0x68 Src\main.o
                 0x08000d88                SystemClock_Config
- .text.SendBitSet
-                0x08000df0       0x2c Src\main.o
-                0x08000df0                SendBitSet
- .text.SendBitClr
-                0x08000e1c       0x2c Src\main.o
-                0x08000e1c                SendBitClr
- .text.SendByte
-                0x08000e48       0x3c Src\main.o
-                0x08000e48                SendByte
- .text.SendData
-                0x08000e84       0x1c Src\main.o
-                0x08000e84                SendData
- .text.SendCom  0x08000ea0       0x1c Src\main.o
-                0x08000ea0                SendCom
- .text.LCD_Init
-                0x08000ebc       0x50 Src\main.o
-                0x08000ebc                LCD_Init
- .text.XadressLCD
-                0x08000f0c       0x10 Src\main.o
-                0x08000f0c                XadressLCD
- .text.YadressLCD
-                0x08000f1c       0x10 Src\main.o
-                0x08000f1c                YadressLCD
- .text.SetXY    0x08000f2c       0x20 Src\main.o
-                0x08000f2c                SetXY
- .text.LCD_RAM_Clr
-                0x08000f4c       0x4c Src\main.o
-                0x08000f4c                LCD_RAM_Clr
- .text.PrintFrame
-                0x08000f98       0xf0 Src\main.o
-                0x08000f98                PrintFrame
- .text.PinAOut  0x08001088       0x20 Src\main.o
-                0x08001088                PinAOut
- .text.PinAIn   0x080010a8       0x20 Src\main.o
-                0x080010a8                PinAIn
+ .text.PinAOut  0x08000df0       0x20 Src\main.o
+                0x08000df0                PinAOut
+ .text.PinAIn   0x08000e10       0x20 Src\main.o
+                0x08000e10                PinAIn
  .text.StartDHT
-                0x080010c8       0x50 Src\main.o
-                0x080010c8                StartDHT
- .text.ReadDHT  0x08001118       0xa0 Src\main.o
-                0x08001118                ReadDHT
+                0x08000e30       0x50 Src\main.o
+                0x08000e30                StartDHT
+ .text.ReadDHT  0x08000e80       0xa0 Src\main.o
+                0x08000e80                ReadDHT
  .text.PrintBig
-                0x080011b8       0x38 Src\main.o
-                0x080011b8                PrintBig
+                0x08000f20       0x38 Src\main.o
+                0x08000f20                PrintBig
  .text.PrintToBig
-                0x080011f0       0x64 Src\main.o
-                0x080011f0                PrintToBig
+                0x08000f58       0x64 Src\main.o
+                0x08000f58                PrintToBig
  .text.PrintRHTmprBig
-                0x08001254       0x74 Src\main.o
-                0x08001254                PrintRHTmprBig
- .text.myputc   0x080012c8       0x30 Src\main.o
-                0x080012c8                myputc
+                0x08000fbc       0x74 Src\main.o
+                0x08000fbc                PrintRHTmprBig
+ .text.myputc   0x08001030       0x30 Src\main.o
+                0x08001030                myputc
  .text.PrintString
-                0x080012f8       0x12 Src\main.o
-                0x080012f8                PrintString
+                0x08001060       0x12 Src\main.o
+                0x08001060                PrintString
  .text.PrintVariable
-                0x0800130a       0x3a Src\main.o
-                0x0800130a                PrintVariable
- .text.Screen0  0x08001344       0x84 Src\main.o
-                0x08001344                Screen0
+                0x08001072       0x3a Src\main.o
+                0x08001072                PrintVariable
+ .text.Screen0  0x080010ac       0x84 Src\main.o
+                0x080010ac                Screen0
  .text.startup.main
-                0x080013c8      0x1a8 Src\main.o
-                0x080013c8                main
- .text.Screen1  0x08001570       0x68 Src\main.o
-                0x08001570                Screen1
+                0x08001130      0x1a8 Src\main.o
+                0x08001130                main
+ .text.Screen1  0x080012d8       0x68 Src\main.o
+                0x080012d8                Screen1
  .text.Switch0_1
-                0x080015d8       0x2c Src\main.o
-                0x080015d8                Switch0_1
+                0x08001340       0x2c Src\main.o
+                0x08001340                Switch0_1
  .text.Switch1_2
-                0x08001604       0x2c Src\main.o
-                0x08001604                Switch1_2
+                0x0800136c       0x2c Src\main.o
+                0x0800136c                Switch1_2
  .text.Switch2_0
-                0x08001630       0x2c Src\main.o
-                0x08001630                Switch2_0
+                0x08001398       0x2c Src\main.o
+                0x08001398                Switch2_0
+ .text.SendBitSet
+                0x080013c4       0x2c Src\nokia5110.o
+                0x080013c4                SendBitSet
+ .text.SendBitClr
+                0x080013f0       0x2c Src\nokia5110.o
+                0x080013f0                SendBitClr
+ .text.SendByte
+                0x0800141c       0x3c Src\nokia5110.o
+                0x0800141c                SendByte
+ .text.SendData
+                0x08001458       0x1c Src\nokia5110.o
+                0x08001458                SendData
+ .text.SendCom  0x08001474       0x1c Src\nokia5110.o
+                0x08001474                SendCom
+ .text.LCD_Init
+                0x08001490       0x50 Src\nokia5110.o
+                0x08001490                LCD_Init
+ .text.XadressLCD
+                0x080014e0       0x10 Src\nokia5110.o
+                0x080014e0                XadressLCD
+ .text.YadressLCD
+                0x080014f0       0x10 Src\nokia5110.o
+                0x080014f0                YadressLCD
+ .text.SetXY    0x08001500       0x20 Src\nokia5110.o
+                0x08001500                SetXY
+ .text.LCD_RAM_Clr
+                0x08001520       0x4c Src\nokia5110.o
+                0x08001520                LCD_RAM_Clr
+ .text.PrintFrame
+                0x0800156c       0xf0 Src\nokia5110.o
+                0x0800156c                PrintFrame
  .text.HAL_MspInit
                 0x0800165c       0x90 Src\stm32f1xx_hal_msp.o
                 0x0800165c                HAL_MspInit
@@ -1148,44 +1152,48 @@ LOAD g:/truestudio for stm32 9.0.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.
  .ARM.attributes
                 0x0000017c       0x33 Src\main.o
  .ARM.attributes
-                0x000001af       0x33 Src\stm32f1xx_hal_msp.o
+                0x000001af       0x33 Src\nokia5110.o
  .ARM.attributes
-                0x000001e2       0x33 Src\stm32f1xx_it.o
+                0x000001e2       0x33 Src\stm32f1xx_hal_msp.o
  .ARM.attributes
-                0x00000215       0x33 Src\system_stm32f1xx.o
+                0x00000215       0x33 Src\stm32f1xx_it.o
  .ARM.attributes
-                0x00000248       0x21 startup\startup_stm32f103xb.o
+                0x00000248       0x33 Src\system_stm32f1xx.o
  .ARM.attributes
-                0x00000269       0x2d g:/truestudio for stm32 9.0.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.1/../../../../arm-atollic-eabi/lib/armv7-m\libc_nano.a(lib_a-init.o)
+                0x0000027b       0x21 startup\startup_stm32f103xb.o
  .ARM.attributes
-                0x00000296       0x1d g:/truestudio for stm32 9.0.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.1/armv7-m/crtn.o
+                0x0000029c       0x2d g:/truestudio for stm32 9.0.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.1/../../../../arm-atollic-eabi/lib/armv7-m\libc_nano.a(lib_a-init.o)
+ .ARM.attributes
+                0x000002c9       0x1d g:/truestudio for stm32 9.0.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.1/armv7-m/crtn.o
 OUTPUT(Meteostation.elf elf32-littlearm)
 
-.debug_info     0x00000000     0xee1f
+.debug_info     0x00000000     0xf84a
  .debug_info    0x00000000      0xece Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o
  .debug_info    0x00000ece     0x1463 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.o
  .debug_info    0x00002331      0xe7c Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.o
  .debug_info    0x000031ad     0x118f Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.o
  .debug_info    0x0000433c     0x3b74 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o
  .debug_info    0x00007eb0     0x194c Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
- .debug_info    0x000097fc     0x2774 Src\main.o
- .debug_info    0x0000bf70     0x11f1 Src\stm32f1xx_hal_msp.o
- .debug_info    0x0000d161     0x1045 Src\stm32f1xx_it.o
- .debug_info    0x0000e1a6      0xc07 Src\system_stm32f1xx.o
- .debug_info    0x0000edad       0x72 startup\startup_stm32f103xb.o
+ .debug_info    0x000097fc     0x2236 Src\main.o
+ .debug_info    0x0000ba32      0xf69 Src\nokia5110.o
+ .debug_info    0x0000c99b     0x11f1 Src\stm32f1xx_hal_msp.o
+ .debug_info    0x0000db8c     0x1045 Src\stm32f1xx_it.o
+ .debug_info    0x0000ebd1      0xc07 Src\system_stm32f1xx.o
+ .debug_info    0x0000f7d8       0x72 startup\startup_stm32f103xb.o
 
-.debug_abbrev   0x00000000     0x1d32
+.debug_abbrev   0x00000000     0x1f69
  .debug_abbrev  0x00000000      0x2c2 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o
  .debug_abbrev  0x000002c2      0x399 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.o
  .debug_abbrev  0x0000065b      0x268 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.o
  .debug_abbrev  0x000008c3      0x354 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.o
  .debug_abbrev  0x00000c17      0x3bb Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o
  .debug_abbrev  0x00000fd2      0x30d Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
- .debug_abbrev  0x000012df      0x3e0 Src\main.o
- .debug_abbrev  0x000016bf      0x22c Src\stm32f1xx_hal_msp.o
- .debug_abbrev  0x000018eb      0x24a Src\stm32f1xx_it.o
- .debug_abbrev  0x00001b35      0x1eb Src\system_stm32f1xx.o
- .debug_abbrev  0x00001d20       0x12 startup\startup_stm32f103xb.o
+ .debug_abbrev  0x000012df      0x3c1 Src\main.o
+ .debug_abbrev  0x000016a0      0x256 Src\nokia5110.o
+ .debug_abbrev  0x000018f6      0x22c Src\stm32f1xx_hal_msp.o
+ .debug_abbrev  0x00001b22      0x24a Src\stm32f1xx_it.o
+ .debug_abbrev  0x00001d6c      0x1eb Src\system_stm32f1xx.o
+ .debug_abbrev  0x00001f57       0x12 startup\startup_stm32f103xb.o
 
 .debug_loc      0x00000000     0x4c91
  .debug_loc     0x00000000       0x69 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o
@@ -1194,11 +1202,12 @@ OUTPUT(Meteostation.elf elf32-littlearm)
  .debug_loc     0x0000083e      0x404 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.o
  .debug_loc     0x00000c42     0x300c Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o
  .debug_loc     0x00003c4e      0x854 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
- .debug_loc     0x000044a2      0x6bc Src\main.o
+ .debug_loc     0x000044a2      0x483 Src\main.o
+ .debug_loc     0x00004925      0x239 Src\nokia5110.o
  .debug_loc     0x00004b5e       0x66 Src\stm32f1xx_hal_msp.o
  .debug_loc     0x00004bc4       0xcd Src\system_stm32f1xx.o
 
-.debug_aranges  0x00000000      0x740
+.debug_aranges  0x00000000      0x758
  .debug_aranges
                 0x00000000       0xb0 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o
  .debug_aranges
@@ -1212,43 +1221,47 @@ OUTPUT(Meteostation.elf elf32-littlearm)
  .debug_aranges
                 0x00000470       0xe8 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
  .debug_aranges
-                0x00000558      0x118 Src\main.o
+                0x00000558       0xb8 Src\main.o
  .debug_aranges
-                0x00000670       0x30 Src\stm32f1xx_hal_msp.o
+                0x00000610       0x78 Src\nokia5110.o
  .debug_aranges
-                0x000006a0       0x50 Src\stm32f1xx_it.o
+                0x00000688       0x30 Src\stm32f1xx_hal_msp.o
  .debug_aranges
-                0x000006f0       0x28 Src\system_stm32f1xx.o
+                0x000006b8       0x50 Src\stm32f1xx_it.o
  .debug_aranges
-                0x00000718       0x28 startup\startup_stm32f103xb.o
+                0x00000708       0x28 Src\system_stm32f1xx.o
+ .debug_aranges
+                0x00000730       0x28 startup\startup_stm32f103xb.o
 
-.debug_ranges   0x00000000      0x910
+.debug_ranges   0x00000000      0x918
  .debug_ranges  0x00000000       0xa0 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o
  .debug_ranges  0x000000a0      0x128 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.o
  .debug_ranges  0x000001c8       0x60 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.o
  .debug_ranges  0x00000228       0xa0 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.o
  .debug_ranges  0x000002c8      0x340 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o
  .debug_ranges  0x00000608       0xd8 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
- .debug_ranges  0x000006e0      0x150 Src\main.o
- .debug_ranges  0x00000830       0x68 Src\stm32f1xx_hal_msp.o
- .debug_ranges  0x00000898       0x40 Src\stm32f1xx_it.o
- .debug_ranges  0x000008d8       0x18 Src\system_stm32f1xx.o
- .debug_ranges  0x000008f0       0x20 startup\startup_stm32f103xb.o
+ .debug_ranges  0x000006e0       0xf0 Src\main.o
+ .debug_ranges  0x000007d0       0x68 Src\nokia5110.o
+ .debug_ranges  0x00000838       0x68 Src\stm32f1xx_hal_msp.o
+ .debug_ranges  0x000008a0       0x40 Src\stm32f1xx_it.o
+ .debug_ranges  0x000008e0       0x18 Src\system_stm32f1xx.o
+ .debug_ranges  0x000008f8       0x20 startup\startup_stm32f103xb.o
 
-.debug_line     0x00000000     0x38ba
+.debug_line     0x00000000     0x3ad5
  .debug_line    0x00000000      0x3b8 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o
  .debug_line    0x000003b8      0x3de Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.o
  .debug_line    0x00000796      0x3f7 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.o
  .debug_line    0x00000b8d      0x5ab Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.o
  .debug_line    0x00001138     0x10f8 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o
  .debug_line    0x00002230      0x69c Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
- .debug_line    0x000028cc      0x751 Src\main.o
- .debug_line    0x0000301d      0x2ba Src\stm32f1xx_hal_msp.o
- .debug_line    0x000032d7      0x332 Src\stm32f1xx_it.o
- .debug_line    0x00003609      0x234 Src\system_stm32f1xx.o
- .debug_line    0x0000383d       0x7d startup\startup_stm32f103xb.o
+ .debug_line    0x000028cc      0x5cc Src\main.o
+ .debug_line    0x00002e98      0x3a0 Src\nokia5110.o
+ .debug_line    0x00003238      0x2ba Src\stm32f1xx_hal_msp.o
+ .debug_line    0x000034f2      0x332 Src\stm32f1xx_it.o
+ .debug_line    0x00003824      0x234 Src\system_stm32f1xx.o
+ .debug_line    0x00003a58       0x7d startup\startup_stm32f103xb.o
 
-.debug_str      0x00000000     0x2c7e
+.debug_str      0x00000000     0x2c91
  .debug_str     0x00000000      0xb17 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o
                                 0xbb2 (size before relaxing)
  .debug_str     0x00000b17      0x2e1 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.o
@@ -1261,13 +1274,15 @@ OUTPUT(Meteostation.elf elf32-littlearm)
                                0x17b2 (size before relaxing)
  .debug_str     0x000023d7      0x4f1 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
                                0x1054 (size before relaxing)
- .debug_str     0x000028c8      0x28e Src\main.o
-                               0x1312 (size before relaxing)
- .debug_str     0x00002b56       0x25 Src\stm32f1xx_hal_msp.o
+ .debug_str     0x000028c8      0x251 Src\main.o
+                               0x12c5 (size before relaxing)
+ .debug_str     0x00002b19       0x50 Src\nokia5110.o
+                                0x706 (size before relaxing)
+ .debug_str     0x00002b69       0x25 Src\stm32f1xx_hal_msp.o
                                 0xdad (size before relaxing)
- .debug_str     0x00002b7b       0xb6 Src\stm32f1xx_it.o
+ .debug_str     0x00002b8e       0xb6 Src\stm32f1xx_it.o
                                 0xb6a (size before relaxing)
- .debug_str     0x00002c31       0x4d Src\system_stm32f1xx.o
+ .debug_str     0x00002c44       0x4d Src\system_stm32f1xx.o
                                 0x6ec (size before relaxing)
 
 .comment        0x00000000       0x7c
@@ -1279,19 +1294,21 @@ OUTPUT(Meteostation.elf elf32-littlearm)
  .comment       0x0000007c       0x7d Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o
  .comment       0x0000007c       0x7d Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
  .comment       0x0000007c       0x7d Src\main.o
+ .comment       0x0000007c       0x7d Src\nokia5110.o
  .comment       0x0000007c       0x7d Src\stm32f1xx_hal_msp.o
  .comment       0x0000007c       0x7d Src\stm32f1xx_it.o
  .comment       0x0000007c       0x7d Src\system_stm32f1xx.o
 
-.debug_frame    0x00000000     0x1560
+.debug_frame    0x00000000     0x1570
  .debug_frame   0x00000000      0x174 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o
  .debug_frame   0x00000174      0x120 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.o
  .debug_frame   0x00000294       0xd4 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.o
  .debug_frame   0x00000368      0x144 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.o
  .debug_frame   0x000004ac      0x854 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o
  .debug_frame   0x00000d00      0x320 Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o
- .debug_frame   0x00001020      0x3c0 Src\main.o
- .debug_frame   0x000013e0       0x58 Src\stm32f1xx_hal_msp.o
- .debug_frame   0x00001438       0xcc Src\stm32f1xx_it.o
- .debug_frame   0x00001504       0x30 Src\system_stm32f1xx.o
- .debug_frame   0x00001534       0x2c g:/truestudio for stm32 9.0.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.1/../../../../arm-atollic-eabi/lib/armv7-m\libc_nano.a(lib_a-init.o)
+ .debug_frame   0x00001020      0x274 Src\main.o
+ .debug_frame   0x00001294      0x15c Src\nokia5110.o
+ .debug_frame   0x000013f0       0x58 Src\stm32f1xx_hal_msp.o
+ .debug_frame   0x00001448       0xcc Src\stm32f1xx_it.o
+ .debug_frame   0x00001514       0x30 Src\system_stm32f1xx.o
+ .debug_frame   0x00001544       0x2c g:/truestudio for stm32 9.0.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.1/../../../../arm-atollic-eabi/lib/armv7-m\libc_nano.a(lib_a-init.o)
