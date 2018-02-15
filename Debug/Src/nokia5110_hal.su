@@ -1,0 +1,12 @@
+nokia5110_hal.c:13:6:SendBitSet	8	static
+nokia5110_hal.c:22:6:SendBitClr	8	static
+nokia5110_hal.c:31:6:SendByte	16	static
+nokia5110_hal.c:46:6:SendData	8	static
+nokia5110_hal.c:52:6:SendCom	8	static
+nokia5110_hal.c:59:6:LCD_Init	8	static
+nokia5110_hal.c:91:6:XadressLCD	0	static
+nokia5110_hal.c:95:6:YadressLCD	0	static
+nokia5110_hal.c:99:6:SetXY	8	static
+nokia5110_hal.c:107:6:LCD_RAM_Clr	16	static
+nokia5110_hal.c:125:6:PrintFrame	16	static
+nokia5110_hal.c:214:6:NextLine	8	static

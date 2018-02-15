@@ -1604,8 +1604,6 @@ HAL_StatusTypeDef HAL_TIM_Base_Stop_DMA(TIM_HandleTypeDef *htim);
   * @}
   */
 
-
-
 /** @addtogroup TIM_Exported_Functions_Group2
  * @{
  */
