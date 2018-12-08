@@ -2482,7 +2482,7 @@ HAL_StatusTypeDef HAL_I2C_Mem_Write(I2C_HandleTypeDef *hi2c, uint16_t DevAddress
     hi2c->XferCount   = Size;
     hi2c->XferOptions = I2C_NO_OPTION_FRAME;
     hi2c->XferSize    = hi2c->XferCount;
-    
+    I2C_MEM_ADD_LSB(MemAddress);
     /* Send Slave Address and Memory Address */
     if(I2C_RequestMemoryWrite(hi2c, DevAddress, MemAddress, MemAddSize, Timeout, tickstart) != HAL_OK)
     {

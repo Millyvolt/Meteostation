@@ -310,9 +310,8 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
 
 
 
-
-  while(hcdc->TxState);	//MY CODE - KVV
-  	  	  	  	  	  	//HOW MUCH TIME THIS CYCLE TAKES?
+  while( hcdc->TxState )
+	  ;
 
 
 
@@ -321,6 +320,8 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
   }
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, Len);
   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+//  while( !(hcdc->TxState) )
+//  	  ;
   /* USER CODE END 7 */
   return result;
 }
