@@ -138,6 +138,7 @@ void Switch2_0(void);
 
 int32_t BME280_tmpr();//(int32_t adc_T);
 uint32_t BME280_h();
+void BME280_reset();
 
 
 
@@ -208,12 +209,17 @@ int main(void)
   HAL_Delay(900);	/*DHT2_ NEEDS 2S DELAY FOR INITIALIZATION*/
 
 
-  HAL_Delay(4000);//
-  if( HAL_I2C_Mem_Read(&hi2c1, 0xEC, 0xF4, I2C_MEMADD_SIZE_8BIT, dataBME, 1, 0x10000)==HAL_OK )
-	  CDC_Transmit_FS("\nctrl reading - 1st read", strlen);
+  HAL_Delay(4000);
+
+
+  //BME280_reset();
+
+
+  //set filter and stby duration
   HAL_Delay(5);
-  sprintf(bufTx, "\nctrl = 0x%X", dataBME[0]);
-  CDC_Transmit_FS(bufTx, strlen(bufTx));
+  dataBME[0] = 0b10001000;	//set filter coefficient 4 and stby duration 500ms
+  if( HAL_I2C_Mem_Write(&hi2c1, 0xEC, 0xF5, I2C_MEMADD_SIZE_8BIT, dataBME, 1, 0x10000)==HAL_OK )
+	  CDC_Transmit_FS("\nset filter 4\nset stdby duration 500ms", strlen);
 
   //normal mode launch
   HAL_Delay(5);//
@@ -223,21 +229,9 @@ int main(void)
   HAL_Delay(5);//
   dataBME[0] = 0b00100011;	//set temperature oversampling *1
   if( HAL_I2C_Mem_Write(&hi2c1, 0xEC, 0xF4, I2C_MEMADD_SIZE_8BIT, dataBME, 1, 0x10000)==HAL_OK )
-	  CDC_Transmit_FS("\nnormal mode launch", strlen);
+	  CDC_Transmit_FS("\nset temperature oversampling *1\nnormal mode launch", strlen);
 
 
-  //reset BME280
-//  HAL_Delay(5);//
-//  dataBME[0] = 0xB6;
-//  if( HAL_I2C_Mem_Write(&hi2c1, 0xEC, 0xE0, I2C_MEMADD_SIZE_8BIT, dataBME, 1, 0x10000)==HAL_OK )
-//	  CDC_Transmit_FS("\nreset BME280", strlen);
-//  HAL_Delay(1000);
-//  if( HAL_I2C_Mem_Read(&hi2c1, 0xEC, 0xF3, I2C_MEMADD_SIZE_8BIT, dataBME, 1, 0x10000)==HAL_OK )
-//  		  CDC_Transmit_FS("\nstatus reading", strlen);
-//  HAL_Delay(5);
-//  dataBME[0] &= 0b00001001;
-//  sprintf(bufTx, "\nstatus=0x%X", dataBME[0]);
-//  CDC_Transmit_FS(bufTx, strlen(bufTx));
 
   while(1)
   {
@@ -793,6 +787,8 @@ int32_t BME280_tmpr()	//(int32_t adc_T)
 	if( HAL_I2C_Mem_Read(&hi2c1, 0xEC, 0xFA, I2C_MEMADD_SIZE_8BIT, dataBME, 3, 0x10000)==HAL_OK )
 		/*CDC_Transmit_FS("\ntemperature raw received ", strlen)*/;
 	adc_T = (((int32_t)dataBME[0])<<16) + (((int32_t)dataBME[1])<<8) + (int32_t)dataBME[2];
+	adc_T &= 0x00FFFFFF;
+	adc_T >>= 4;
 
 	adc_TTx = adc_T;
 
@@ -863,6 +859,23 @@ uint32_t BME280_h()	//(int32_t adc_H)
 	return (uint32_t)(v_x1_u32r>>12);
 
 }
+
+void BME280_reset()
+{
+	  HAL_Delay(5);//
+	  dataBME[0] = 0xB6;
+	  if( HAL_I2C_Mem_Write(&hi2c1, 0xEC, 0xE0, I2C_MEMADD_SIZE_8BIT, dataBME, 1, 0x10000)==HAL_OK )
+		  CDC_Transmit_FS("\nreset BME280", strlen);
+	  HAL_Delay(1000);
+	  if( HAL_I2C_Mem_Read(&hi2c1, 0xEC, 0xF3, I2C_MEMADD_SIZE_8BIT, dataBME, 1, 0x10000)==HAL_OK )
+	  		  CDC_Transmit_FS("\nstatus reading", strlen);
+	  HAL_Delay(5);
+	  dataBME[0] &= 0b00001001;
+	  sprintf(bufTx, "\nstatus=0x%X", dataBME[0]);
+	  CDC_Transmit_FS(bufTx, strlen(bufTx));
+}
+
+
 
 
 /* USER CODE END 4 */
