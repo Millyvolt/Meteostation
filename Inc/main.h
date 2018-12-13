@@ -75,8 +75,6 @@
 #define CE_GPIO_Port GPIOA
 #define RST_Pin GPIO_PIN_7
 #define RST_GPIO_Port GPIOA
-#define BUTTON1_Pin GPIO_PIN_11
-#define BUTTON1_GPIO_Port GPIOB
 #define LEDB12_Pin GPIO_PIN_12
 #define LEDB12_GPIO_Port GPIOB
 #define BUTTON2_Pin GPIO_PIN_13

@@ -55,7 +55,6 @@ void PrintVariable(uint16_t var);
 
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
-extern I2C_HandleTypeDef hi2c1;
 extern TIM_HandleTypeDef htim3;
 
 /******************************************************************************/
@@ -273,75 +272,47 @@ void TIM3_IRQHandler(void)
 	  but2 = 0;
 
   /* polling button1 */
-  if( HAL_GPIO_ReadPin(BUTTON1_GPIO_Port, BUTTON1_Pin) == GPIO_PIN_RESET )
-  {
-	  if( !but1 )
-	  {
-		  switch(screen_state)
-		  {
-		  case 0:
-			  HAL_GPIO_TogglePin(LEDB12_GPIO_Port, LEDB12_Pin);
-			  break;
-		  case 1:
-			  switch(menu_state)
-			  {
-			  case 0:
-				  Switch0_1();
-				  menu_state = 1;
-				  break;
-			  case 1:
-				  Switch1_2();
-				  menu_state = 2;
-				  break;
-			  case 2:
-				  Switch2_0();
-				  menu_state = 0;
-				  break;
-			  default:
-				  break;
-			  }
-			  break;
-		  default:
-			  break;
-		  }
-
-		  but1 = 1;		/*flag of pressing button1*/
-	  }
-  }
-  else if(but1)
-	  but1 = 0;
+//  if( HAL_GPIO_ReadPin(BUTTON1_GPIO_Port, BUTTON1_Pin) == GPIO_PIN_RESET )
+//  {
+//	  if( !but1 )
+//	  {
+//		  switch(screen_state)
+//		  {
+//		  case 0:
+//			  HAL_GPIO_TogglePin(LEDB12_GPIO_Port, LEDB12_Pin);
+//			  break;
+//		  case 1:
+//			  switch(menu_state)
+//			  {
+//			  case 0:
+//				  Switch0_1();
+//				  menu_state = 1;
+//				  break;
+//			  case 1:
+//				  Switch1_2();
+//				  menu_state = 2;
+//				  break;
+//			  case 2:
+//				  Switch2_0();
+//				  menu_state = 0;
+//				  break;
+//			  default:
+//				  break;
+//			  }
+//			  break;
+//		  default:
+//			  break;
+//		  }
+//
+//		  but1 = 1;		/*flag of pressing button1*/
+//	  }
+//  }
+//  else if(but1)
+//	  but1 = 0;
 
 
 
   /* USER CODE END TIM3_IRQn 1 */
-}
-
-/**
-* @brief This function handles I2C1 event interrupt.
-*/
-void I2C1_EV_IRQHandler(void)
-{
-  /* USER CODE BEGIN I2C1_EV_IRQn 0 */
-
-  /* USER CODE END I2C1_EV_IRQn 0 */
-  HAL_I2C_EV_IRQHandler(&hi2c1);
-  /* USER CODE BEGIN I2C1_EV_IRQn 1 */
-
-  /* USER CODE END I2C1_EV_IRQn 1 */
-}
-
-/**
-* @brief This function handles I2C1 error interrupt.
-*/
-void I2C1_ER_IRQHandler(void)
-{
-  /* USER CODE BEGIN I2C1_ER_IRQn 0 */
-
-  /* USER CODE END I2C1_ER_IRQn 0 */
-  HAL_I2C_ER_IRQHandler(&hi2c1);
-  /* USER CODE BEGIN I2C1_ER_IRQn 1 */
-
-  /* USER CODE END I2C1_ER_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
